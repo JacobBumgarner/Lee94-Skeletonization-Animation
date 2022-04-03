@@ -27,6 +27,10 @@ def load_volume(filename, objects=3, skeletonize_volume=False):
     
     """
     
+    if os.path.splitext(filename)[1] == '.npy':
+        volume = np.load('labeled.npy')
+        return volume
+    
     # Load the volume, get the three largest components
     volume = imread(filename)
     volume = skeletonize.binarize(volume)
@@ -228,7 +232,7 @@ def add_mesh(plotter, volume, removal_id=None, opacity=1):
     
 def add_cycle_text(plotter, cycle, iteration):
     plotter.add_text(f"Cycle: {cycle+1}, Iteration: {iteration+1}",
-                     name='cycle')
+                     name='cycle', position='upper_edge')
     return
     
 def load_opacity_decay(frames, decay_rate):
@@ -335,11 +339,8 @@ def animate_skeletonization(filename, movie_path, volume_objects=3,
     plotter = prep_plotter(position=plotter_position, offscreen=offscreen,
                            background=background)
 
-    if os.path.splitext(filename)[1] == '.npy':
-        volume = np.load('labeled.npy')
-    else:
-        volume = load_volume(filename, objects=volume_objects,
-                             skeletonize_volume=True)
+    volume = load_volume(filename, objects=volume_objects,
+                         skeletonize_volume=True)
     vc = volume.copy()
     
     frames = (volume.max()-6) * iteration_frames
@@ -405,28 +406,31 @@ def animate_skeletonization(filename, movie_path, volume_objects=3,
     return
     
 if __name__ == "__main__":
-    filename = "/Users/jacobbumgarner/Documents/GitHub/Lee94-Skeletonization-Animation/Slice3.nii"
-    filename = "labeled.npy"
+    filename = "/Users/jacobbumgarner/Documents/GitHub/Lee94-Skeletonization-Animation/Slice 11.nii"
+    # filename = "labeled.npy"
     movie_path = "/Users/jacobbumgarner/Desktop/test.mp4"
     
-    save_skeleton_npy = True
+    save_skeleton_npy = False
     npy_path = "labeled.npy"
     
     plotter_position = [
-                        (-263.93, 63.45, 56.47),
-                        (25.50, 50.50, 50.50),
-                        (0.05, 0.73, 0.69)
+(287.79, -12.34, 105.38),
+(18.50, 50.50, 50.50),
+(-0.07, 0.46, 0.88)
+# (279.58, -50.43, 146.56),
+# (25.50, 50.50, 50.50),
+# (0.02, 0.72, 0.70)
                         ]
     
-    volume_objects = 8
+    volume_objects = 1
     frame_rate = 60
     iteration_frames = 45
-    decay_rate = 0.6
+    decay_rate = 0.5
     orbit = True
     orbit_angle = 360
     bounce = False
     rebuild = True
-    offscreen = False
+    offscreen = True
     background = 'black'
     decay_color = 'red'
     
