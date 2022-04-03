@@ -5,9 +5,4 @@ I decided to create a bit of code that easily allows for visualization of the st
 
 This skeletonization algorithm is the one used in FIJI, skimage, and VesselVio. I rewrote the algorithm using numpy & numba for [VesselVio](https://github.com/JacobBumgarner/VesselVio), so I've just copied it over here.
 
-
-
-
-
-https://user-images.githubusercontent.com/70919881/161441413-f936ecd8-49d8-4068-bfc4-83422b2b5577.mp4
-
+https://user-images.githubusercontent.com/70919881/161442222-8bb4f95b-4365-4c7d-8271-8fb315f2dd7a.mp4
