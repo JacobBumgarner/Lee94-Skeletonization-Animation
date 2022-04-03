@@ -1,0 +1,38 @@
+
+a.py
+matrix.py
+Movies/
+
+*.npy
+*.nii
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Distribution / packaging
+bin/
+build/
+dist/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+.tox/
+.coverage
+
+
+.DS_Store
+VesselVio Build and Distribution Instructions.rtf
+entitlements.plist
+fix_app.py
+
+Segmented/
+VesselVio Log/
+VesselVio.code-workspace
+VesselVio.spec
+tmp/VesselVio.zip
+build_app.sh
+Skeletonization Animation.code-workspace
