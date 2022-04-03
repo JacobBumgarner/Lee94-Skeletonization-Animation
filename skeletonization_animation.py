@@ -243,7 +243,8 @@ def load_opacity_decay(frames, decay_rate):
     
     return decay_array
 
-def test_animation(filename, save_npy=False, npy_path='labeled.npy'):
+def test_animation(filename, plotter_position=None, volume_objects=3,
+                   save_npy=False, npy_path='labeled.npy'):
     """A minimal function to visualize the dataset for plotter camera position
     configuration and creation of a .npy of the skeletonized volume
     
@@ -263,18 +264,20 @@ def test_animation(filename, save_npy=False, npy_path='labeled.npy'):
     """
     
     
-    volume = load_volume(filename, skeletonize_volume=save_npy)
+    volume = load_volume(filename, volume_objects,
+                         skeletonize_volume=save_npy)
     
     if save_npy:
         np.save(npy_path, volume)
     
-    plotter = prep_plotter(position, add_widget=True)
+    plotter = prep_plotter(plotter_position, add_widget=True)
     add_mesh(plotter, volume)
     plotter.add_axes()
     plotter.show()
     return
 
-def animate_skeletonization(filename, movie_path, position=None,
+def animate_skeletonization(filename, movie_path, volume_objects=3, 
+                            plotter_position=None,
                             frame_rate=60, iteration_frames=30, decay_rate=0.4, 
                             orbit=False, orbit_angle=90, 
                             bounce=False, rebuild=False,
@@ -290,8 +293,11 @@ def animate_skeletonization(filename, movie_path, position=None,
     
     movie_path: str
         .mp4 File path to save the movie
+    
+    volume_objects: int, optional
+        The n largest objects to keep in the volume
         
-    position: list, optional
+    plotter_position: list, optional
         2D list containing the plotter position, focal point, and viewup
     
     frame_rate: int, optional
@@ -326,13 +332,14 @@ def animate_skeletonization(filename, movie_path, position=None,
     #endregion
     
     # Create the plotter 
-    plotter = prep_plotter(position=position, offscreen=offscreen,
+    plotter = prep_plotter(position=plotter_position, offscreen=offscreen,
                            background=background)
 
     if os.path.splitext(filename)[1] == '.npy':
         volume = np.load('labeled.npy')
     else:
-        volume = load_volume(filename, skeletonize_volume=True)
+        volume = load_volume(filename, objects=volume_objects,
+                             skeletonize_volume=True)
     vc = volume.copy()
     
     frames = (volume.max()-6) * iteration_frames
@@ -398,19 +405,20 @@ def animate_skeletonization(filename, movie_path, position=None,
     return
     
 if __name__ == "__main__":
-    filename = "/Users/jacobbumgarner/Desktop/Skeletonization Animation/Skeletonization Demo.nii"
-    # filename = "labeled.npy"
-    movie_path = "/Users/jacobbumgarner/Desktop/Skeletonization Animation/test.mp4"
+    filename = "/Users/jacobbumgarner/Documents/GitHub/Lee94-Skeletonization-Animation/Slice3.nii"
+    filename = "labeled.npy"
+    movie_path = "/Users/jacobbumgarner/Desktop/test.mp4"
     
     save_skeleton_npy = True
     npy_path = "labeled.npy"
     
-    position = [
-(-241.33, 103.90, 180.49),
-(20.50, 49.00, 56.00),
-(0.07, -0.85, 0.53)
-                ]
+    plotter_position = [
+                        (-263.93, 63.45, 56.47),
+                        (25.50, 50.50, 50.50),
+                        (0.05, 0.73, 0.69)
+                        ]
     
+    volume_objects = 8
     frame_rate = 60
     iteration_frames = 45
     decay_rate = 0.6
@@ -422,9 +430,11 @@ if __name__ == "__main__":
     background = 'black'
     decay_color = 'red'
     
-    # test_animation(filename, save_skeleton_npy, npy_path)
+    # test_animation(filename, plotter_position,
+    #                volume_objects, save_skeleton_npy, npy_path)
     
-    animate_skeletonization(filename, movie_path, position,
+    animate_skeletonization(filename, movie_path, volume_objects,
+                            plotter_position,
                             frame_rate, iteration_frames, decay_rate, 
                             orbit, orbit_angle, 
                             bounce, rebuild,
