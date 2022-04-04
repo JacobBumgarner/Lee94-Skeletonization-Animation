@@ -353,7 +353,7 @@ def animate_skeletonization(filename, movie_path, volume_objects=3,
     plotter.open_movie(movie_path, framerate=frame_rate)
     plotter.clear()
     add_mesh(plotter, volume)
-    for _ in range(10):
+    for _ in range(20):
         plotter.write_frame()
     
     # Prep the opacity array
@@ -367,6 +367,7 @@ def animate_skeletonization(filename, movie_path, volume_objects=3,
         for i in range(int(frames/iteration_frames/6)):
             for j in range(6):
                 plotter.clear()
+                add_cycle_text(plotter, i, j)
                 
                 # First add the removal volume
                 actor = add_mesh(plotter, volume,
@@ -379,8 +380,10 @@ def animate_skeletonization(filename, movie_path, volume_objects=3,
                 if actor:
                     property = actor.GetProperty()
                 
+                if i == 0 and j == 0: # Write some still frames to prevent jitter
+                    for _ in range(20):
+                        plotter.write_frame()
                 
-                add_cycle_text(plotter, i, j)
                 for k in range(iteration_frames):
                     print (f"Frame: {frame+1}/{frames}", end='\r')
                     
